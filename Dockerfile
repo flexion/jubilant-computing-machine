@@ -1,8 +1,12 @@
-FROM jdkato/vale
+FROM jdkato/vale:v2.22.0
 
-
-RUN apk --no-cache add git asciidoctor docbook2x libxslt py3-docutils
-RUN mkdir -p /styles
+RUN \
+  apk --no-cache add \
+    git=2.38.4-r0 \
+    asciidoctor=2.0.18-r0 \
+    docbook2x=0.8.8-r8 \
+    libxslt=1.1.37-r0 \
+    py3-docutils=0.19-r1
 
 ENTRYPOINT ["/entrypoint.sh"]
 
