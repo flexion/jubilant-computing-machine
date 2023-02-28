@@ -6,4 +6,4 @@ else
   config="/vale.ini"
 fi
 
-/bin/vale --config="${config}" .
+/bin/vale --config="${config}" "$@"

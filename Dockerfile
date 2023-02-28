@@ -6,9 +6,7 @@ RUN mkdir -p /styles /docs ; git clone https://github.com/testthedocs/PlainLangu
 
 WORKDIR /docs
 
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 COPY entrypoint.sh /entrypoint.sh
 COPY vale.ini /vale.ini
-
-CMD .
