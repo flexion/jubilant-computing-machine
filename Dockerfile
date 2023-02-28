@@ -2,7 +2,6 @@ FROM jdkato/vale:v2.22.0
 
 RUN \
   apk --no-cache add \
-    git=2.38.4-r0 \
     asciidoctor=2.0.18-r0 \
     docbook2x=0.8.8-r8 \
     libxslt=1.1.37-r0 \
