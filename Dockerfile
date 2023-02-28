@@ -1,10 +1,8 @@
 FROM jdkato/vale
 
 
-RUN apk update && apk add git
-RUN mkdir -p /styles /docs ; git clone https://github.com/testthedocs/PlainLanguage.git /styles
-
-WORKDIR /docs
+RUN apk --no-cache add git asciidoctor docbook2x libxslt py3-docutils
+RUN mkdir -p /styles
 
 ENTRYPOINT ["/entrypoint.sh"]
 
