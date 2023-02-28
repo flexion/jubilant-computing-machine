@@ -11,12 +11,10 @@ be more plain language.
 
 Read more at [PlainLanguage.gov](https://www.plainlanguage.gov/).
 
-Chris Chinchilla ([website](https://chrischinchilla.com/))
-([GitHub](https://github.com/ChrisChinchilla)) curates a series of
-style rules for Vale.  Vale is an open-source command-line tool to
-give stylistic feedback to writers of content.  The intention of these
-style rules is to help writers write using language that's more readable
-and accessible.
+Chris Chinchilla curates a series of style rules for Vale.  Vale is an
+open-source command-line tool to give stylistic feedback to writers of
+content.  The intention of these style rules is to help writers write
+using language that's more readable and accessible.
 
 ## This tool
 
@@ -25,8 +23,8 @@ Vale and a variety of style rules that tests prose.
 
 
 ### CI/CD scanning
-[LanguageTool Action](https://github.com/marketplace/actions/run-languagetool-with-reviewdog)
-or [vale-linter](https://github.com/marketplace/actions/vale-linter)
+
+or
 may be more appropriate for scanning as a part of a CI/CD system.
 This action already includes the scaffolding to surface the scan results
 more cleanly, such as PR (Pull Request) comments.
@@ -35,7 +33,7 @@ more cleanly, such as PR (Pull Request) comments.
 
 ```sh
 docker build \
-  -t PlainLanguage:latest \
+  --tag JubilantComputingMachine:latest \
   .
 ```
 
@@ -43,17 +41,22 @@ docker build \
 
 ```sh
 docker run \
+  --interactive \
   --rm \
-  -it \
-  -w "$(pwd)" \
-  -v "$(pwd):$(pwd)" \
-  -v "${HOME}/.valestyles:/styles" \
-  -u "$(id -u)" \
-  PlainLanguage'
+  --tty \
+  --user "$(id --user)" \
+  --volume "${PWD}:${PWD}" \
+  --volume "${HOME}/.valestyles:/styles" \
+  --workdir "${PWD}" \
+  JubilantComputingMachine'
 ```
 
 ## Credit
 
+* [Chris Chinchilla's website](https://chrischinchilla.com/)
+* [Chris Chincilla's GitHub](https://github.com/ChrisChinchilla)
+* [LanguageTool Action](https://github.com/marketplace/actions/run-languagetool-with-reviewdog)
+* [vale-linter](https://github.com/marketplace/actions/vale-linter)
 * [Vale](https://vale.sh/)
 * [base image](https://hub.docker.com/r/jdkato/vale)
 * [PlainLanguage rules](https://github.com/testthedocs/PlainLanguage)
