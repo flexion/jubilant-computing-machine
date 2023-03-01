@@ -80,14 +80,14 @@ Including this line in your shell configuration file (e.g., .bashrc)
 will provide an alias of `vale` that will run the containerized image
 without installing Vale on your local system.
 
-`alias vale='docker run -it --rm -u "$(id --user)" -v "${PWD}:${PWD}" -v
-"${HOME}/.valestyles:/styles" -w "${PWD}" JubilantComputingMachine'`
+```sh
+alias vale='docker run -it --rm -u "$(id --user)" -v "${PWD}:${PWD}" -v "${HOME}/.valestyles:/styles" -w "${PWD}" JubilantComputingMachine'
+```
 
 [PlainLanguage.gov]: https://plainlanguage.gov
 [style rules]: https://github.com/testthedocs/PlainLanguage
 [ChrisChinchilla.com]: https://chrischinchilla.com/
 [GitHub.com/ChrisChincilla]: https://github.com/ChrisChinchilla/
-[JDKato.io]: https://jdkato.io/
 [GitHub.com/jdkato]: https://github.com/jdkato
 [LanguageTool Action]: https://github.com/marketplace/actions/run-languagetool-with-reviewdog
 [vale-linter]: https://github.com/marketplace/actions/vale-linter
