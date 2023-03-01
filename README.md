@@ -34,7 +34,19 @@ may be more appropriate for scanning as a part of a CI/CD system.
 This action already includes the scaffolding to surface the scan results
 more cleanly, such as PR (Pull Request) comments.
 
+### Differences from the JDKato image
+
+The key differences between this and the base image from JDKato are:
+
+- basic style caching
+- basic default Vale configuration
+- support enabled for additional file formats
+- pinned, documented dependencies
+
 ## Building
+
+Building the image requires a container engine such as [Docker][Docker]
+or [Podman][Podman].
 
 ```sh
 docker build \
@@ -44,8 +56,14 @@ docker build \
 
 ## Running
 
+Running a container, like building the image, requires a container
+engine.  This example shows how to run a container with the current
+directory and a style cache bind-mounted to it.  If the cache directory
+doesn't exist, it will be created.
+
 ```sh
-docker run \
+( [ ! -d "${HOME}/.valestyles" ] && mkdir -p "${HOME}/.valestyles" ) \
+&& docker run \
   --interactive \
   --rm \
   --tty \
@@ -55,6 +73,15 @@ docker run \
   --workdir "${PWD}" \
   JubilantComputingMachine
 ```
+
+### Running as an alias
+
+Including this line in your shell configuration file (e.g., .bashrc)
+will provide an alias of `vale` that will run the containerized image
+without installing Vale on your local system.
+
+`alias vale='docker run -it --rm -u "$(id --user)" -v "${PWD}:${PWD}" -v
+"${HOME}/.valestyles:/styles" -w "${PWD}" JubilantComputingMachine'`
 
 [PlainLanguage.gov]: https://plainlanguage.gov
 [style rules]: https://github.com/testthedocs/PlainLanguage
@@ -67,3 +94,5 @@ docker run \
 [Vale]: https://vale.sh/
 [base image]: https://hub.docker.com/r/jdkato/vale
 [DockerHub]: https://hub.docker.com/
+[Docker]: https://docker.com/
+[Podman]: https://podman.io/

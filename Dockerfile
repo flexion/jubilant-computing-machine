@@ -1,4 +1,4 @@
-FROM jdkato/vale:v2.22.0
+FROM docker.io/jdkato/vale:v2.22.0
 
 # renovate: datasource=repology depName=alpine_3_17/asciidoctor versioning=loose
 ENV ASCIIDOCTOR_VERSION="2.0.18-r0"
