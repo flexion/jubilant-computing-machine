@@ -11,7 +11,7 @@ be more plain language.
 
 Read more at [PlainLanguage.gov][PlainLanguage.gov].
 
-Chris Chinchilla ([ChrisChincilla.com][ChrisChincilla.com] /
+Chris Chinchilla ([ChrisChinchilla.com][ChrisChinchilla.com] /
 [GitHub.com/ChrisChincilla][GitHub.com/ChrisChincilla])
 curates a series of [style rules][style rules] for Vale.  [Vale][Vale]
 is an open-source command-line tool to give stylistic feedback to
@@ -56,14 +56,14 @@ docker run \
   JubilantComputingMachine
 ```
 
-* [PlainLanguage.gov]: https://plainlanguage.gov
-* [style rules]: https://github.com/testthedocs/PlainLanguage
-* [ChrisChinchilla.com]: https://chrischinchilla.com/
-* [GitHub.com/ChrisChincilla]: https://github.com/ChrisChinchilla/
-* [JDKato.io]: https://jdkato.io/
-* [GitHub.com/jdkato]: https://github.com/jdkato
-* [LanguageTool Action]: https://github.com/marketplace/actions/run-languagetool-with-reviewdog
-* [vale-linter]: https://github.com/marketplace/actions/vale-linter
-* [Vale]: https://vale.sh/
-* [base image]: https://hub.docker.com/r/jdkato/vale
-* [Docker Hub]: https://hub.docker.com/
+[PlainLanguage.gov]: https://plainlanguage.gov
+[style rules]: https://github.com/testthedocs/PlainLanguage
+[ChrisChinchilla.com]: https://chrischinchilla.com/
+[GitHub.com/ChrisChincilla]: https://github.com/ChrisChinchilla/
+[JDKato.io]: https://jdkato.io/
+[GitHub.com/jdkato]: https://github.com/jdkato
+[LanguageTool Action]: https://github.com/marketplace/actions/run-languagetool-with-reviewdog
+[vale-linter]: https://github.com/marketplace/actions/vale-linter
+[Vale]: https://vale.sh/
+[base image]: https://hub.docker.com/r/jdkato/vale
+[DockerHub]: https://hub.docker.com/
