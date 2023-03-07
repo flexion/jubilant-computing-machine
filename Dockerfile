@@ -24,6 +24,7 @@ RUN \
 
 ENTRYPOINT ["/entrypoint.sh"]
 USER "${RUNNER}"
+HEALTHCHECK NONE
 
 COPY entrypoint.sh /entrypoint.sh
 COPY vale.ini /vale.ini
