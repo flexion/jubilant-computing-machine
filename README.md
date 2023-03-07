@@ -53,7 +53,7 @@ Building the image requires a container engine such as
 
 ```sh
 docker build \
-  --tag JubilantComputingMachine:latest \
+  --tag jubliant-computing-machine:latest \
   .
 ```
 
@@ -74,7 +74,7 @@ doesn't exist, it'll be created.
   --volume "${PWD}:${PWD}" \
   --volume "${HOME}/.valestyles:/styles" \
   --workdir "${PWD}" \
-  JubilantComputingMachine
+  docker.io/wesleydeanflexion/jubliant-computing-machine
 ```
 
 ### Running as an alias
@@ -84,5 +84,5 @@ will set an alias of `vale` that'll run the containerized image
 without installing Vale on your local system.
 
 ```sh
-alias vale='docker run -it --rm -u "$(id --user)" -v "${PWD}:${PWD}" -v "${HOME}/.valestyles:/styles" -w "${PWD}" JubilantComputingMachine'
+alias vale='docker run -it --rm -u "$(id --user)" -v "${PWD}:${PWD}" -v "${HOME}/.valestyles:/styles" -w "${PWD}" docker.io/wesleydeanflexion/jubliant-computing-machine'
 ```
