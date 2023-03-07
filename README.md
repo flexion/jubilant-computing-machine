@@ -81,8 +81,8 @@ doesn't exist, it'll be created.
 
 The image is built and published to several public registries for your convenience:
 
-* [dockerhub](docker.io/wesleydeanflexion/jubliant-computing-machine:latest)
-* [ghcr](ghcr.io/wesley-dean-flexion/jubilant-computing-machine:latest)
+* DockerHub: docker.io/wesleydeanflexion/jubliant-computing-machine:latest
+* GitHub Container Registry: ghcr.io/wesley-dean-flexion/jubilant-computing-machine:latest
 
 
 ### Running as an alias
