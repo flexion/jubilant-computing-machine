@@ -12,7 +12,7 @@ be more plain language.
 Read more at [PlainLanguage.gov](https://plainlanguage.gov).
 
 Chris Chinchilla ([website](https://ChrisChinchilla.com/) and
-[GitHub](https://github.com/ChrisChincilla)
+[GitHub](https://github.com/ChrisChincilla))
 curates a series of [style rules](https://github.com/testthedocs/PlainLanguage)
 or Vale.  [Vale](https://vale.sh/) is an open-source command-line
 tool to give stylistic feedback to writers of content.  The
