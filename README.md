@@ -77,6 +77,14 @@ doesn't exist, it'll be created.
   docker.io/wesleydeanflexion/jubliant-computing-machine
 ```
 
+### Public registries
+
+The image is built and published to several public registries for your convenience:
+
+[dockerhub](docker.io/wesleydeanflexion/jubliant-computing-machine:latest)
+[ghcr](ghcr.io/wesley-dean-flexion/jubilant-computing-machine:latest)
+
+
 ### Running as an alias
 
 Including this line in your shell configuration file (e.g., .bashrc)
