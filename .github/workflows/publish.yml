@@ -10,9 +10,6 @@ on:
 
 jobs:
   docker:
-    strategy:
-      matrix:
-        platform: [linux/arm64/v8,linux/amd64]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
             registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
