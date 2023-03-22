@@ -17,7 +17,7 @@ RUN \
     py3-docutils="${PY3_DOCUTILS_VERSION}" \
     zip="${ZIP_VERSION}" \
   && mkdir -p /PlainLanguage \
-  && wget https://github.com/testthedocs/PlainLanguage/archive/refs/heads/master.zip -O /PlainLanguage/master.zip \
+  && wget -q https://github.com/testthedocs/PlainLanguage/archive/refs/heads/master.zip -O /PlainLanguage/master.zip \
   && unzip -j -d /PlainLanguage /PlainLanguage/master.zip \
   && rm -f /PlainLanguage/master.zip \
   && zip /PlainLanguage.zip /PlainLanguage \
