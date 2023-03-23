@@ -82,7 +82,7 @@ doesn't exist, it'll be created.
 The image is built and published to several public registries for your convenience:
 
 * DockerHub: docker.io/wesleydeanflexion/jubliant-computing-machine:latest
-* GitHub Container Registry: ghcr.io/wesley-dean-flexion/jubilant-computing-machine:latest
+* GitHub Container Registry: ghcr.io/flexion/jubilant-computing-machine:latest
 
 
 ### Running as an alias
