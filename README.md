@@ -77,20 +77,20 @@ doesn't exist, it'll be created.
   docker.io/wesleydeanflexion/jubliant-computing-machine
 ```
 
-#### Custom Vocabularies
+### Custom Vocabularies
 
 Custom vocabularies (regular expressions that may be allowed or prohibited)
 may be specified by adding lines to `.vale.accept` and `.vale.reject`,
 respectively.  These correspond to `accept.txt` and `reject.txt` per the
 [Vale Vocab documentation](https://vale.sh/docs/topics/vocab/).
 
-#### Custom Styles
+### Custom Styles
 
 [Custom styles](https://vale.sh/docs/topics/styles/) are also supported.  When
 configured as a package (e.g., Readability, proselint, one may use the `sync`
 command to `vale` in order to download and install the appropriate packages.
 
-#### Configuration Files
+### Configuration Files
 
 When a configuration file (.vale.ini) is available, it'll be used; if not,
 a default vale.ini will be used instead.
