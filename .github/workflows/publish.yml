@@ -44,3 +44,9 @@ jobs:
           tags: |
             ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
             registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+
+      - name: update DockerHub description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PAT }}
