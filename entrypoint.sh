@@ -17,7 +17,7 @@ if [ ! -d "${styles_path}" ]; then
   mkdir -p "${styles_path}"
 fi
 
-if [ ! -d "${vocab_path}" ] ; then
+if [ ! -d "${vocab_path}" ]; then
   printf "[note] creating missing Custom Vocab path '%s'\n" "${vocab_path}" 1>&2
   mkdir -p "${vocab_path}"
 fi
@@ -27,16 +27,15 @@ if [ -n "$(find "${styles_path}" -maxdepth 0 -type d -empty 2> /dev/null)" ]; th
   /bin/vale --config="${config}" sync
 fi
 
-if [ -f ".vale.accept" ] ; then
+if [ -f ".vale.accept" ]; then
   printf "[note] adding accept list to '%s'\n" "${vocab_path}accept.txt" 1>&2
   cp -f ".vale.accept" "${vocab_path}accept.txt"
 fi
 
-if [ -f ".vale.reject" ] ; then
+if [ -f ".vale.reject" ]; then
   printf "[note] adding reject list to '%s'\n" "${vocab_path}reject.txt" 1>&2
   cp -f ".vale.reject" "${vocab_path}reject.txt"
 fi
-
 
 if [ -z "$1" ]; then
   /bin/vale --config="${config}" .
