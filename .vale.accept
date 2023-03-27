@@ -1,8 +1,9 @@
-JDKato
-CI/CD
-Kato
-Docker
-docker
-Podman
+(?i)jdkato
+(?i)ci[[:space:]]*/[[:space:]]*cd
+(?i)kato
+(?i)docker
+(?i)podman
+(?i)pull[[:space:]]*request
+(?i)proselint
 io/wesleydeanflexion
 io/flexion
