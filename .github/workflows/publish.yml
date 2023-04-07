@@ -34,7 +34,6 @@ jobs:
           sudo apt-get install -fy jq
           echo "::set-output name=DESCRIPTION:: $(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')"
 
-
       - name: Checkout
         uses: actions/checkout@v3
 
