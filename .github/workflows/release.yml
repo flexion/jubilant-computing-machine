@@ -3,9 +3,8 @@ name: Publish
 
 # yamllint disable-line rule:truthy
 on:
-  push:
-    branches: [main, master]
-  workflow_dispatch:
+  release:
+    types: [published]
 
 permissions: read-all
 
@@ -31,7 +30,7 @@ jobs:
       - name: Set repository description
         id: description
         run: |
-          sudo apt-get install -fy jq curl
+          sudo apt-get install -fy jq
           echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
 
       - name: Checkout
@@ -63,8 +62,10 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
-            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
+            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}}:${{ github.event.release.name }}
+            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
           labels: |
             org.opencontainers.image.created=${{ env.DATE }}
             org.opencontainers.image.authors=${{ secrets.GHCR_USERNAME }}
@@ -74,6 +75,7 @@ jobs:
             org.opencontainers.image.revision=${{ env.GITHUB_REF }}
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
+            org.opencontainers.image.version=${{ github.event.release.name }}
 
       - name: update DockerHub description
         uses: peter-evans/dockerhub-description@v3
