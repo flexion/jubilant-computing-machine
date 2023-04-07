@@ -66,8 +66,6 @@ jobs:
           tags: |
             ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
             registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
-#            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}}:${{ github.event.release.name }}
-#            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
           labels: |
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
             org.opencontainers.image.authors=${{ secrets.GHCR_USERNAME }}
@@ -77,7 +75,6 @@ jobs:
             org.opencontainers.image.revision=${{ env.GITHUB_REF }}
             org.opencontainers.image.base.name=${{ steps.baseimage.outputs.IMAGE_BASE }}
             org.opencontainers.image.description=${{ steps.description.outputs.DESCRIPTION }}
-#            org.opencontainers.image.version=${{ github.event.release.name }}
 
       - name: update DockerHub description
         uses: peter-evans/dockerhub-description@v3
