@@ -29,7 +29,6 @@ jobs:
           sudo apt-get install -fy jq curl
           echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
 
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
