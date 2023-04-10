@@ -23,10 +23,9 @@ jobs:
       - name: Set environment variables
         id: setvars
         run: |
-          # Short name for current branch. For PRs, use target branch (base ref)
           echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
+          # shellcheck disable=SC2129
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
-          #          sudo apt-get install -fy jq curl
           echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')" >> "$GITHUB_ENV"
 
 
