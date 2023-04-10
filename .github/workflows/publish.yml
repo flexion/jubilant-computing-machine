@@ -18,19 +18,11 @@ jobs:
         run: echo "DATE=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
 
       - name: Set environment variables
-        id: branch
+        id: setvars
         run: |
           # Short name for current branch. For PRs, use target branch (base ref)
           echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
-
-      - name: Set image base
-        id: baseimage
-        run: |
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
-
-      - name: Set repository description
-        id: description
-        run: |
           sudo apt-get install -fy jq curl
           echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
 
