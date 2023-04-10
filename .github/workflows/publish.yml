@@ -64,7 +64,7 @@ jobs:
             org.opencontainers.image.url=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
             org.opencontainers.image.documentation=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}/blob/${{ env.GIT_BRANCH }}/README.md
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
-            org.opencontainers.image.revision=${{ env.GITHUB_REF }}
+            org.opencontainers.image.revision=${{ github.ref }}
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
 
