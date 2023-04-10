@@ -62,8 +62,8 @@ jobs:
             org.opencontainers.image.created=${{ env.DATE }}
             org.opencontainers.image.authors=${{ secrets.GHCR_USERNAME }}
             org.opencontainers.image.url=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
-            org.opencontainers.image.documentation=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}/blob/${{ env.GIT_BRANCH }}/README.md
-            org.opencontainers.image.source=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
+            org.opencontainers.image.documentation=${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY }}/blob/${{ env.GIT_BRANCH }}/README.md
+            org.opencontainers.image.source=${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY }}
             org.opencontainers.image.revision=${{ env.GITHUB_REF }}
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
