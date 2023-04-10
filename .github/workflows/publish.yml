@@ -23,11 +23,11 @@ jobs:
       - name: Set environment variables
         id: setvars
         run: |
-          # Short name for current branch. For PRs, use target branch (base ref)
-          echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
-          echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
-          sudo apt-get install -fy jq curl
-          echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
+          {
+            echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}"
+            echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)"
+            echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')"
+          } >> "$GITHUB_ENV"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -59,11 +59,11 @@ jobs:
             registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
           labels: |
             org.opencontainers.image.created=${{ env.DATE }}
-            org.opencontainers.image.authors=${{ secrets.GHCR_USERNAME }}
-            org.opencontainers.image.url=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
-            org.opencontainers.image.documentation=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}/blob/${{ env.GIT_BRANCH }}/README.md
-            org.opencontainers.image.source=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
-            org.opencontainers.image.revision=${{ env.GITHUB_REF }}
+            org.opencontainers.image.authors=${{ github.repository_owner }}
+            org.opencontainers.image.url=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            org.opencontainers.image.documentation=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}/blob/${{ env.GIT_BRANCH }}/README.md
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            org.opencontainers.image.revision=${{ github.ref }}
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
 
