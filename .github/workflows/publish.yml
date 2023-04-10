@@ -27,7 +27,7 @@ jobs:
           echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
           #          sudo apt-get install -fy jq curl
-          echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" | jq -r '.description')" >> "$GITHUB_ENV"
+          echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')" >> "$GITHUB_ENV"
 
 
       - name: Set up QEMU
