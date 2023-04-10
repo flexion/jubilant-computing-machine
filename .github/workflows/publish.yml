@@ -21,10 +21,10 @@ jobs:
         id: setvars
         run: |
           # Short name for current branch. For PRs, use target branch (base ref)
-          echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
-          echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> $GITHUB_ENV
+          echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
+          echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
           sudo apt-get install -fy jq curl
-          echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> $GITHUB_ENV
+          echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v3
