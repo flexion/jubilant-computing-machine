@@ -27,7 +27,7 @@ jobs:
           echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
           #          sudo apt-get install -fy jq curl
-          echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${GIT_BRANCH}" | jq -r '.description')" >> "$GITHUB_ENV"
+          echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/${GIT_BRANCH}" | jq -r '.description')" >> "$GITHUB_ENV"
 
 
       - name: Set up QEMU
@@ -61,9 +61,9 @@ jobs:
           labels: |
             org.opencontainers.image.created=${{ env.DATE }}
             org.opencontainers.image.authors=${{ secrets.GHCR_USERNAME }}
-            org.opencontainers.image.url=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
-            org.opencontainers.image.documentation=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}/blob/${{ env.GIT_BRANCH }}/README.md
-            org.opencontainers.image.source=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
+            org.opencontainers.image.url=${{ github.server_url }}/$${ github.repository_owner }}/${{ github.event.repository.name }}
+            org.opencontainers.image.documentation=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}/blob/${{ env.GIT_BRANCH }}/README.md
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
             org.opencontainers.image.revision=${{ env.GITHUB_REF }}
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
