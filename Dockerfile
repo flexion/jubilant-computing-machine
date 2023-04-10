@@ -12,7 +12,9 @@ RUN tr '\n' '\0' < apk.txt | xargs -0 apk add --no-cache  \
   && wget -q https://github.com/testthedocs/PlainLanguage/archive/refs/heads/master.zip -O /PlainLanguage/master.zip \
   && unzip -j -d /PlainLanguage /PlainLanguage/master.zip \
   && rm -f /PlainLanguage/master.zip \
-  && zip /PlainLanguage.zip /PlainLanguage
+  && zip /PlainLanguage.zip /PlainLanguage \
+  && apk info -v | sort > packages.txt
+
 
 ENTRYPOINT ["/entrypoint.sh"]
 USER "${RUNNER}"

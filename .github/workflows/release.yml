@@ -3,8 +3,9 @@ name: Release
 
 # yamllint disable-line rule:truthy
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main, master]
+  workflow_dispatch:
 
 permissions: read-all
 
@@ -16,25 +17,18 @@ jobs:
         id: date
         run: echo "DATE=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Set environment variables
-        id: branch
+        id: setvars
         run: |
           # Short name for current branch. For PRs, use target branch (base ref)
           echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
-
-      - name: Set image base
-        id: baseimage
-        run: |
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
+          #          sudo apt-get install -fy jq curl
+          echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')" >> "$GITHUB_ENV"
 
-      - name: Set repository description
-        id: description
-        run: |
-          sudo apt-get install -fy jq
-          echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
-
-      - name: Checkout
-        uses: actions/checkout@v3
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -62,17 +56,17 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
+            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
             registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}}:${{ github.event.release.name }}
-            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
+            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
           labels: |
             org.opencontainers.image.created=${{ env.DATE }}
-            org.opencontainers.image.authors=${{ secrets.GHCR_USERNAME }}
-            org.opencontainers.image.url=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
-            org.opencontainers.image.documentation=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}/blob/${{ env.GIT_BRANCH }}/README.md
-            org.opencontainers.image.source=${{ github.server_url }}/${{ env.GITHUB_REPOSITORY }}
-            org.opencontainers.image.revision=${{ env.GITHUB_REF }}
+            org.opencontainers.image.authors=${{ github.repository_owner }}
+            org.opencontainers.image.url=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            org.opencontainers.image.documentation=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}/blob/${{ env.GIT_BRANCH }}/README.md
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository_owner }}/${{ github.event.repository.name }}
+            org.opencontainers.image.revision=${{ github.ref }}
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
             org.opencontainers.image.version=${{ github.event.release.name }}
