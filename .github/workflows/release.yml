@@ -11,11 +11,7 @@ permissions: read-all
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:
-      - name: Get current date
-        id: date
-        run: echo "DATE=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
-
+    steps:    
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -23,6 +19,7 @@ jobs:
         id: setvars
         run: |
           {
+            echo "DATE=$(date +'%Y-%m-%d')"
             echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}"
             echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)"
             echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')"
