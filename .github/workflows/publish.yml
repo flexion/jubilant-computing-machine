@@ -26,8 +26,8 @@ jobs:
           # Short name for current branch. For PRs, use target branch (base ref)
           echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}" >> "$GITHUB_ENV"
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
-          sudo apt-get install -fy jq curl
-          echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${ GITHUB_REPOSITORY } | jq -r '.description')" >> "$GITHUB_ENV"
+          #          sudo apt-get install -fy jq curl
+          echo "DESCRIPTION=$(curl -q "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY#*/}" | jq -r '.description')" >> "$GITHUB_ENV"
 
 
       - name: Set up QEMU
