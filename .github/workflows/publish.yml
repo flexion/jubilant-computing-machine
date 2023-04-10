@@ -17,6 +17,9 @@ jobs:
         id: date
         run: echo "DATE=$(date +'%Y-%m-%d')" >> "$GITHUB_ENV"
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Set environment variables
         id: setvars
         run: |
@@ -26,8 +29,6 @@ jobs:
           sudo apt-get install -fy jq curl
           echo "DESCRIPTION=$(curl -q https://api.github.com/repos/${{ env.GITHUB_REPOSITORY }} | jq -r '.description')" >> "$GITHUB_ENV"
 
-      - name: Checkout
-        uses: actions/checkout@v3
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
