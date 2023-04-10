@@ -28,7 +28,6 @@ jobs:
           echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)" >> "$GITHUB_ENV"
           echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')" >> "$GITHUB_ENV"
 
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
