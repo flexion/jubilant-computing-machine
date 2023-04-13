@@ -54,7 +54,6 @@ jobs:
           password: ${{ env.DOCKERHUB_PAT }}
           registry: registry.hub.docker.com
 
-
       - name: Login to Quay
         if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' }}
         uses: docker/login-action@v2
@@ -111,7 +110,7 @@ jobs:
           repository: ${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
 
       - name: update GHCR SBOM
-        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}} 
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
@@ -120,7 +119,7 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Dockerhub SBOM
-        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}} 
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
           image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
@@ -129,7 +128,7 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Quay SBOM
-        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}} 
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
           image: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
