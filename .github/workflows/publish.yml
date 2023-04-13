@@ -16,14 +16,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set environment secrets
-        env:
-          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
-          GHCR_PAT: ${{ secrets.GHCR_PAT }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
-          QUAY_USRENAME: ${{ secrets.QUAY_USERNAME }}
-          QUAY_PAT: ${{ secrets.QUAY_PAT }}
+        #      - name: Set environment secrets
+        #env:
+        #  GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+        #  GHCR_PAT: ${{ secrets.GHCR_PAT }}
+        #  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        #  DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
+        #  QUAY_USRENAME: ${{ secrets.QUAY_USERNAME }}
+        #  QUAY_PAT: ${{ secrets.QUAY_PAT }}
 
       - name: Set environment variables
         id: setvars
@@ -33,6 +33,12 @@ jobs:
             echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}"
             echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)"
             echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')"
+            echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}"
+            echo "GHCR_PAT=${{ secrets.GHCR_PAT }}"
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}"
+            echo "DOCKERHUB_PAT=${{ secrets.DOCKERHUB_PAT }}"
+            echo "QUAY_USERNAME=${{ secrets.QUAY_USERNAME }}"
+            echo "QUAY_PAT=${{ secrets.QUAY_PAT }}"
           } >> "$GITHUB_ENV"
 
       - name: Set up QEMU
