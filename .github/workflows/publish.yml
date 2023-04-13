@@ -16,15 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-        #      - name: Set environment secrets
-        #env:
-        #  GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
-        #  GHCR_PAT: ${{ secrets.GHCR_PAT }}
-        #  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        #  DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
-        #  QUAY_USRENAME: ${{ secrets.QUAY_USERNAME }}
-        #  QUAY_PAT: ${{ secrets.QUAY_PAT }}
-
       - name: Set environment variables
         id: setvars
         run: |
@@ -39,7 +30,6 @@ jobs:
             echo "DOCKERHUB_PAT=${{ secrets.DOCKERHUB_PAT }}"
             echo "QUAY_USERNAME=${{ secrets.QUAY_USERNAME }}"
             echo "QUAY_PAT=${{ secrets.QUAY_PAT }}"
-            echo "QUAY_ACCOUNT=$(echo "${{ secrets.QUAY_USERNAME }}" | sed -Ene 's/([^+]*)+.*/\1/p')"
           } >> "$GITHUB_ENV"
 
       - name: Set up QEMU
@@ -105,12 +95,12 @@ jobs:
           tags: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
 
       - name: Push to Quay
-        if: ${{ env.QUAY_ACCOUNT != '' && env.QUAY_PAT != '' }}
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' }}
         uses: docker/build-push-action@v4
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: quay.io/${{ env.QUAY_ACCOUNT }}/${{ github.event.repository.name }}:edge
+          tags: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
 
       - name: update DockerHub description
         uses: peter-evans/dockerhub-description@v3
