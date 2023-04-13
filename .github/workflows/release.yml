@@ -11,7 +11,7 @@ permissions: read-all
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:    
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -96,9 +96,10 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
-          tags: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
-          tags: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
+          tags: |
+            ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
+            ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
+            ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
 
       - name: Push to Quay
         if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' }}
@@ -106,9 +107,10 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
-          tags: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:latest
-          tags: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
+          tags: |
+            quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
+            quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:latest
+            quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
 
       - name: update DockerHub description
         if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' }}
@@ -119,7 +121,7 @@ jobs:
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
 
       - name: update GHCR SBOM
-        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}} 
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
@@ -128,7 +130,7 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Dockerhub SBOM
-        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}} 
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
           image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
@@ -137,11 +139,10 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Quay SBOM
-        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}} 
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
           image: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
           registry-username: ${{ env.QUAY_USERNAME }}
           registry-password: ${{ env.QUAY_PAT }}
           artifact-name: sbom.spdx
-
