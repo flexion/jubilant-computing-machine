@@ -103,6 +103,7 @@ jobs:
           tags: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
 
       - name: update DockerHub description
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' }}
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
@@ -112,7 +113,5 @@ jobs:
       - name: update SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
-          registry-username: ${{ env.GHCR_USERNAME }}
-          registry-password: ${{ env.GHCR_PAT }}
+          image: ${{ github.repository_owner }}/${{ github.event.repository.name }}
           artifact-name: sbom.spdx
