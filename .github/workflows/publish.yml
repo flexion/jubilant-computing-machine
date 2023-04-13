@@ -110,6 +110,7 @@ jobs:
           repository: ${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
 
       - name: update GHCR SBOM
+        id: ghcrsbom
         if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
@@ -119,7 +120,8 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Dockerhub SBOM
-        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}}
+        id: dockerhubsbom
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' && steps.ghcrsbom.conclusion == 'failure' }}
         uses: anchore/sbom-action@v0
         with:
           image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
@@ -128,7 +130,8 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Quay SBOM
-        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}}
+        id: quaysbom
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' && steps.ghcrsbom.conclusion == 'failure' && steps.dockerhubsbom.conclusion == 'failure' }}
         uses: anchore/sbom-action@v0
         with:
           image: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
