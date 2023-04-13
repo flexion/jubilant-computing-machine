@@ -11,7 +11,7 @@ permissions: read-all
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:    
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -23,6 +23,12 @@ jobs:
             echo "GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}"
             echo "IMAGE_BASE=$(sed -Ene 's/^[[:space:]]*from[[:space:]]*([^[:space:]]+).*$/\1/Ip' < Dockerfile)"
             echo "DESCRIPTION=$(curl -q "${{ github.api_url }}/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}" | jq -r '.description')"
+            echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}"
+            echo "GHCR_PAT=${{ secrets.GHCR_PAT }}"
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}"
+            echo "DOCKERHUB_PAT=${{ secrets.DOCKERHUB_PAT }}"
+            echo "QUAY_USERNAME=${{ secrets.QUAY_USERNAME }}"
+            echo "QUAY_PAT=${{ secrets.QUAY_PAT }}"
           } >> "$GITHUB_ENV"
 
       - name: Set up QEMU
@@ -32,29 +38,34 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Packages
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != '' }}
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.GHCR_USERNAME }}
-          password: ${{ secrets.GHCR_PAT }}
+          username: ${{ env.GHCR_USERNAME }}
+          password: ${{ env.GHCR_PAT }}
           registry: ghcr.io
 
       - name: Login to Dockerhub
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' }}
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PAT }}
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PAT }}
           registry: registry.hub.docker.com
 
-      - name: Build and push
+      - name: Login to Quay
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' }}
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.QUAY_USERNAME }}
+          password: ${{ env.QUAY_PAT }}
+          registry: quay.io
+
+      - name: Build
         uses: docker/build-push-action@v4
         with:
-          push: true
+          push: false
           platforms: linux/amd64,linux/arm64
-          tags: |
-            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
-            registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
-            ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
           labels: |
             org.opencontainers.image.created=${{ env.DATE }}
             org.opencontainers.image.authors=${{ github.repository_owner }}
@@ -65,18 +76,73 @@ jobs:
             org.opencontainers.image.base.name=${{ env.IMAGE_BASE }}
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
             org.opencontainers.image.version=${{ github.event.release.name }}
+          tags: |
+            ${{ github.repository_owner }}/${{ github.event.repository.name }}
+
+      - name: Push to Dockerhub
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' }}
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
+            registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+            registry.hub.docker.com/${{ env.dOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
+
+      - name: Push to GHCR
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != '' }}
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
+            ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
+            ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
+
+      - name: Push to Quay
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' }}
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
+            quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:latest
+            quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.release.name }}
 
       - name: update DockerHub description
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' }}
         uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PAT }}
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
 
-      - name: update SBOM
+      - name: update GHCR SBOM
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}}
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:latest
-          registry-username: ${{ secrets.GHCR_USERNAME }}
-          registry-password: ${{ secrets.GHCR_PAT }}
+          image: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
+          registry-username: ${{ env.GHCR_USERNAME }}
+          registry-password: ${{ env.GHCR_PAT }}
+          artifact-name: sbom.spdx
+
+      - name: update Dockerhub SBOM
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}}
+        uses: anchore/sbom-action@v0
+        with:
+          image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
+          registry-username: ${{ env.DOCKERHUB_USERNAME }}
+          registry-password: ${{ env.DOCKERHUB_PAT }}
+          artifact-name: sbom.spdx
+
+      - name: update Quay SBOM
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}}
+        uses: anchore/sbom-action@v0
+        with:
+          image: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
+          registry-username: ${{ env.QUAY_USERNAME }}
+          registry-password: ${{ env.QUAY_PAT }}
           artifact-name: sbom.spdx
