@@ -33,7 +33,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Packages
-        if: ${{ GHCR_USERNAME != '' && GHCR_PAT != '' }}
+        if: ${{ secrets.GHCR_USERNAME != '' && secrets.GHCR_PAT != '' }}
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.GHCR_USERNAME }}
@@ -41,7 +41,7 @@ jobs:
           registry: ghcr.io
 
       - name: Login to Dockerhub
-        if: ${{ DOCKERHUB_USERNAME != '' && DOCKERHUB_PAT != '' }}
+        if: ${{ secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_PAT != '' }}
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -50,7 +50,7 @@ jobs:
 
 
       - name: Login to Quay
-        if: ${{ QUAY_USERNAME != '' && QUAY_PAT != '' }}
+        if: ${{ secrets.QUAY_USERNAME != '' && secrets.QUAY_PAT != '' }}
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.QUAY_USERNAME }}
@@ -73,7 +73,7 @@ jobs:
             org.opencontainers.image.description=${{ env.DESCRIPTION }}
 
       - name: Push to Dockerhub
-        if: ${{ DOCKERHUB_USERNAME != '' && DOCKERHUB_PAT != '' }}
+        if: ${{ secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_PAT != '' }}
         uses: docker/build-push-action@v4
         with:
           push: true
@@ -81,7 +81,7 @@ jobs:
           tags: registry.hub.docker.com/${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
 
       - name: Push to GHCR
-        if: ${{ GHCR_USERNAME != '' && GHCR_PAT != '' }}
+        if: ${{ secrets.GHCR_USERNAME != '' && secrets.GHCR_PAT != '' }}
         uses: docker/build-push-action@v4
         with:
           push: true
@@ -89,7 +89,7 @@ jobs:
           tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
 
       - name: Push to Quay
-        if: ${{ QUAY_USERNAME != '' && QUAY_PAT != '' }}
+        if: ${{ secrets.QUAY_USERNAME != '' && secrets.QUAY_PAT != '' }}
         uses: docker/build-push-action@v4
         with:
           push: true
