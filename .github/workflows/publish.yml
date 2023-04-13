@@ -110,8 +110,29 @@ jobs:
           password: ${{ env.DOCKERHUB_PAT }}
           repository: ${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
 
-      - name: update SBOM
+      - name: update GHCR SBOM
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_PAT != ''}} 
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ github.repository_owner }}/${{ github.event.repository.name }}
+          image: ghcr.io/${{ env.GHCR_USERNAME }}/${{ github.event.repository.name }}:edge
+          registry-username: ${{ env.GHCR_USERNAME }}
+          registry-password: ${{ env.GHCR_PAT }}
+          artifact-name: sbom.spdx
+
+      - name: update Dockerhub SBOM
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}} 
+        uses: anchore/sbom-action@v0
+        with:
+          image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
+          registry-username: ${{ env.DOCKERHUB_USERNAME }}
+          registry-password: ${{ env.DOCKERHUB_PAT }}
+          artifact-name: sbom.spdx
+
+      - name: update Quay SBOM
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}} 
+        uses: anchore/sbom-action@v0
+        with:
+          image: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
+          registry-username: ${{ env.QUAY_USERNAME }}
+          registry-password: ${{ env.QUAY_PAT }}
           artifact-name: sbom.spdx
