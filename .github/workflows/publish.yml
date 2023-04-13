@@ -121,7 +121,7 @@ jobs:
 
       - name: update Dockerhub SBOM
         id: dockerhubsbom
-        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' && steps.ghcrsbom.outcome.status = 'failure' }}
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' && steps.ghcrsbom.outcome.status == 'failure' }}
         uses: anchore/sbom-action@v0
         with:
           image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
