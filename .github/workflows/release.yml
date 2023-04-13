@@ -130,7 +130,7 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Dockerhub SBOM
-        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != ''}}
+        if: ${{ env.DOCKERHUB_USERNAME != '' && env.DOCKERHUB_PAT != '' && ( env.GHCR_USERNAME == '' || env.GHCR_PAT == '') }}
         uses: anchore/sbom-action@v0
         with:
           image: registry.hub.docker.com/${{ env.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:edge
@@ -139,7 +139,7 @@ jobs:
           artifact-name: sbom.spdx
 
       - name: update Quay SBOM
-        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != ''}}
+        if: ${{ env.QUAY_USERNAME != '' && env.QUAY_PAT != '' && ( env.GHCR_USERNAME == '' || env.GHCR_PAT == '') && (env.DOCKERHUB_USERNAME == '' || env.DOCKERHUB_PAT == '') }}
         uses: anchore/sbom-action@v0
         with:
           image: quay.io/${{ env.QUAY_USERNAME }}/${{ github.event.repository.name }}:edge
